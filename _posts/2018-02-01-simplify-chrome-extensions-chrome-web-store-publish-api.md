@@ -1,8 +1,12 @@
 ---
 layout: post
-title:  "Simplify Chrome extension publishing with the Chrome Web Store Publish API"
-category: Development
-tags: [chrome extension, bitbucket, continuous delivery]
+current: post
+cover: assets/images/tD19-cover.png
+navigation: True
+title:  Simplify Chrome extension publishing with the Chrome Web Store Publish API
+tags: [development]
+class: post-template
+subclass: 'post tag-getting-started'
 hash: tD19
 ---
 
@@ -35,7 +39,8 @@ It gives us a way to update an existing store item, and then publish that store 
 
 Upload package for existing store item:
 
-```sh
+
+{% highlight sh %}
 $ curl \
 -H "Authorization: Bearer $TOKEN"  \
 -H "x-goog-api-version: 2" \
@@ -43,11 +48,12 @@ $ curl \
 -T $FILE_NAME \
 -v \
 https://www.googleapis.com/upload/chromewebstore/v1.1/items/$APP_ID
-```
+{% endhighlight %}
+
 
 Publish a store item:
 
-```sh
+{% highlight sh %}
 $ curl \
 -H "Authorization: Bearer $TOKEN"  \
 -H "x-goog-api-version: 2" \
@@ -55,7 +61,7 @@ $ curl \
 -X POST \
 -v \
 https://www.googleapis.com/chromewebstore/v1.1/items/$APP_ID/publish
-```
+{% endhighlight %}
 
 These endpoints can be run using curl in the terminal, but we need a few things: an access token, our packaged extension, and the app ID of the extension we want to update or publish. Let’s address these in the next sections.
 
@@ -69,7 +75,7 @@ Come back after you have your access and refresh tokens.
 
 The ID of your extension can be found either in the store or the [Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard). Go to the dashboard. Find the extension you want to update, or publish. Then, open the **More info** panel to see its ID. Save for later.
 
-![]({{ "/public/img/tD19-app-id.png" | absolute_url }}){: .center-image}
+![]({{ "/assets/images/tD19-app-id.png" | absolute_url }}){: .center-image}
 
 ## Packaging with command-line
 
@@ -77,9 +83,9 @@ You probably already know that in order to upload an extension to the store, it 
 
 For example, in the terminal we can do:
 
-```sh
+{% highlight sh %}
 $ zip -r my_file.zip .
-```
+{% endhighlight %}
 
 And everything in the current directory will be compressed into a zip file.
 
@@ -91,7 +97,7 @@ I’ve put together a basic Chrome extension starter project. [Download the code
 
 _For a detailed review of a Pipelines configuration file, see the [official Bitbucket documentation](https://confluence.atlassian.com/bitbucket/configure-bitbucket-pipelines-yml-792298910.html)._
 
-{% gist dd39d48baf6cb041fd56a3ced01afcf1 %}
+
 
 The pipeline is divided into two parts by branch name: develop and master. The intent is to call the **update** endpoint when code is pushed to the develop branch. But, call the **publish** endpoint when code is pushed to the master branch.
 
@@ -103,9 +109,9 @@ The CWS Publish API requires extensions to be packaged as a zip file before uplo
 
 Here’s a straightforward way to do this: Place extension–specific files into a subfolder called "app" and the zip command can be as simple as:
 
-```sh
+{% highlight sh %}
 zip -r $FILE_NAME ./app
-```
+{% endhighlight %}
 
 _This line prevents us from ever packaging the wrong extension files!_
 
@@ -113,35 +119,35 @@ _This line prevents us from ever packaging the wrong extension files!_
 
 During the build process, Pipelines requests an access token so it can make calls to the CWS Publish API. The access token lasts for 40 minutes before it needs to be refreshed. This is where a refresh token comes into play.
 
-```sh
+{% highlight sh %}
 ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=$CLIENT_ID&client_secret=$CLIENT_SECRET&refresh_token=$REFRESH_TOKEN&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r '.access_token')
-```
+{% endhighlight %}
 
 ## Upload
 
 With the access token in hand, an authorized request to the API can be made to update the extension.
 
-```sh
+{% highlight sh %}
 curl \
 -H "Authorization:Bearer $ACCESS_TOKEN" \
 -H "x-goog-api-version:2" \
 -X PUT \
 -T $FILE_NAME \
 -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/$APP_ID"
-```
+{% endhighlight %}
 
 ### Publish
 
 To publish the extension we can use the following request:
 
-```sh
+{% highlight sh %}
 curl \
 -H "Authorization:Bearer $ACCESS_TOKEN" \
 -H "x-goog-api-version:2" \
 -H "Content-Length:0" \
 -X POST \
 -v "https://www.googleapis.com/chromewebstore/v1.1/items/$APP_ID/publish"
-```
+{% endhighlight %}
 
 ### Environment variables
 
@@ -149,7 +155,7 @@ To close the loop, we need to allow Bitbucket to continually interact with the C
 
 The app ID is publicly available, but you’ll want to secure the others so they aren’t revealed to prying eyes.
 
-![]({{ "/public/img/tD19-environment-variables.png" | absolute_url }})
+![]({{ "/assets/images/tD19-environment-variables.png" | absolute_url }})
 
 From here, your team can start pushing code to the develop and master branches. Pipelines will take care of packaging the extension, uploading it to the store, and publishing it.
 
