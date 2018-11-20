@@ -1,69 +1,91 @@
 ---
-title: Natural Language API, APIs Explorer and AutoML — no code
+title: No code machine learning with Google ML APIs
 categories: [machine learning]
+notes: https://www.evernote.com/shard/s3/nl/196239/de369a32-99cb-4c46-8e50-dc339ecab17d/
 ---
 
 Alternate titles:
 
 - The non technical way to getting started with Google's machine learning APIs
 - No code machine learning with Google APIs
+- No code machine learning with the Cloud Natural Language API and APIs Explorer
+- Natural Language API, APIs Explorer and AutoML — no code
 
-Let's look at different ways we can try the AI and machine learning APIs (application program interface) availabe in the Google Cloud Platform. For example, if we go to the [Cloud Natural Language product page](https://cloud.google.com/natural-language/){:target="\_blank"} there's a "Try the API" tool directly on the page. Right away, we can type in some text and analyze it.
+There are a few different ways we can try the AI and machine learning APIs availabe from Google Cloud. All of which don't require any code.
+
+1. "Try the API" tool - The lowest barrier to entry. These can be found on some of the product pages at [https://cloud.google.com](https://cloud.google.com).
+2. APIs Explorer - Similiar to the "Try the API" tool, but more developer focused and without the fancy UI.
+3. AutoML
+
+_There can a bit of setup involved with AutoML so this post will only cover the first two on the list._
+
+## 1. Try the API
+
+If we go to the [Cloud Natural Language product page][1] a "Try the API" tool can be found directly on the page. Right away, we can type in some text, analyze it and see the results.
 
 For fun, try bits of email messages you've sent to friends or colleagues. Do you think they were perceived positively...negatively? What does the sentiment analysis say?
 
-Let's plug in the following message into the tool and navigate to the **Sentiment** tab...
+Plug in the following message into the tool and navigate to the **Sentiment** tab...
 
 > No worries, we can connect next week. Have a great weekend!
 
-![Screenshot of sentiment analysis results](/assets/images/posts/a21a/try-the-api-nlp.jpg)
-<small class="figcaption">Sentiment analysis results indicate a score of .7 and magnitude of 1.5</small>
+![Sentiment analysis results indicate a score of .7 and magnitude of 1.5][image-1]
 
-Take a moment to study the output. The tool broke out and listed the sentences contained in the message and assigned them some numbers.
+The tool broke out and listed the sentences contained in the message and assigned them some numbers.
 
-The `score` gives us a sense of the overall emotion of a message — between `1` (positive emotion) and `-1` (negative emotion). It doesn't tell us if the emotion is happy, sad or mad. That's up to us to decide. The `magnitude` indicates how much emotional content is present within the message — between `0` and any positive number — and is generally proportional to the message length. Emails tend to be short so we wouldn't expect this value to climb very high.
+The `score` gives us a sense of the overall emotion of a message — between `1` (positive emotion) and `-1` (negative emotion). It doesn't tell us if the emotion is happy, sad or mad. That's up to us to decide.
 
-_For a deeper explanation of how sentiment is represented by the `score` and `magnitude` values, see [Interpreting sentiment analysis values](https://cloud.google.com/natural-language/docs/basics#interpreting_sentiment_analysis_values){:target="\_blank"}._
+The `magnitude` indicates how much emotional content is present within the message — between `0` and any positive number — and is generally proportional to the message length. Emails tend to be short so we wouldn't expect this value to climb very high.
 
-Based on the results, I'd say our message would be regarded in a clearly positive light. But, someone else might disagree. It's possible that the threshold for what's considered clearly positive is different from what we come up with, and that's ok.
+_For a deeper explanation of how sentiment is represented by the `score` and `magnitude` values, see [Interpreting sentiment analysis values][2]._
 
-## APIs Explorer
+These machine learning APIs also come with a "Try the API" tool:
 
-Another way we can dig into the Cloud Natural Language (CNL) API is with the [APIs Explorer](https://developers.google.com/explorer-help){:target="\_blank"} — a tool that helps us explore various Google APIs interactively.
+- [Cloud Vision](https://cloud.google.com/vision/)
+- [Cloud Translation](https://cloud.google.com/translate/)
+- [Cloud Video Intelligence](https://cloud.google.com/video-intelligence/)
+- [Cloud Speech-to-Text](https://cloud.google.com/speech-to-text/)
+- [Cloud Text-to-Speech](https://cloud.google.com/text-to-speech/)
 
-![Screenshot of APIs Explorer home page](/assets/images/posts/a21a/apis-explorer.png)
-<small class="figcaption">The APIs Explorer lists the majority of APIs offered by Google</small>
+## 2. APIs Explorer
 
-{% include image.html
-  url="/assets/images/posts/a21a/apis-explorer.png"
-  alt="Screenshot of the APIs Explorer home page"
-  caption="The APIs Explorer lists the majority of APIs offered by Google" %}
+Another way we can dig into the Cloud Natural Language (CNL) API is with the [APIs Explorer][3] — a tool that helps us explore various Google APIs interactively.
 
-As a beginner, the UI is daunting compared to the friendly layout of the product page tool and it's not clear what to do next. But, not all APIs will have a fancy UI counterpart. Also, with the APIs Explorer, we can play with every switch and dial that an API has. For instance, instead of typing text into an input box as we did before, a body of text can be stored as a file in Google Cloud Storage and fed to the CNL API. This option isn't available in the product page tool.
+![The APIs Explorer lists the majority of APIs offered by Google][image-2]
 
-[Open the browser to the sentiment analysis](https://developers.google.com/apis-explorer/#p/language/v1/language.documents.analyzeSentiment){:target="\_blank"} section of the CNL API. Click into the request body. With the dropdowns, add the `document` property. Then, under the document property, add the `content` property and enter the message to analyze. Finally, add the `type` property and enter "PLAIN_TEXT" (without the quotes).
+~~The API Explorer friendly layout of the product page tool and it's not clear what to do next. But, not all APIs will have a fancy UI counterpart. Also, with the APIs Explorer, we can play with every switch and dial that an API has. For instance, instead of typing text into an input box as we did before, a body of text can be stored as a file in Google Cloud Storage and fed to the CNL API. This option isn't available in the product page tool.~~
 
-![Screenshot of request body filled in with the document, content and type properties added](/assets/images/posts/a21a/apis-explorer-request-body-filled.png)
-<small class="figcaption">Request body filled in with the document, content and type properties added</small>
+[In the CNL sentiment analysis section][4] of the APIs Explorer, click into the request body. Using the dropdown...
 
-At a minimum, a `document` with `content` and `type` properties should be entered into the request body before the execute button is pressed.
+1. Add the `document` property.
+2. Then, under the document property, add the `content` property and enter the same message from the first example.
+3. Finally, add the `type` property and enter "PLAIN_TEXT" (without the quotes).
 
-Ok, if this is the first time you're executing the request, the button will read as **Authorize and execute**. When you press it, Google will ask you to sign in with your account. Otherwise, it'll just read as **Execute**.
+![Request body filled in with the document, content and type properties added][image-3]
 
-After executing the request, check down in the **Response** section to see the results of the analysis. Have a close look at the `score` and `magnitude` properties. Assuming we used the same content from the first example, the numbers will be the same.
+~~At a minimum, a `document` with `content` and `type` properties should be entered into the request body before the execute button is pressed.~~
 
-![Screenshot of sentiment analysis results in JSON format](/assets/images/posts/a21a/apis-explorer-response.png){:style="max-width: 471px"}
-<small class="figcaption">Sentiment analysis results indicate a score of .7 and magnitude of 1.5</small>
+~~If this is the first time you're executing the request, the button will read as **Authorize and execute**. When you press it, Google will ask you to sign in with your account. Otherwise, it'll just read as **Execute**.~~
+
+After pressing the **Authorize and execute** (or just Execute) button, check down in the **Response** section to view the results of the analysis. See the `score` and `magnitude` properties? Assuming we used the same message from the first example, the numbers match.
+
+![Sentiment analysis results indicate a score of .7 and magnitude of 1.5][image-4]{:style="max-width: 471px"}
 
 ## Next steps
 
-Give the [Cloud Vision API](https://cloud.google.com/vision/) a go. Just like the Cloud Natural Language API, you can [try the Cloud Vision API from the product page](https://cloud.google.com/vision/). It only allows for uploading a photo from the desktop. If you don't have a particularly interesting photo already, download some from the internet first. Or, if you [head over to the Cloud Vision API in the API Explorer](Cloud Vision API in the API Explorer), more options are available.
+Give the Cloud Vision API a go. Just like the Cloud Natural Language API, you can [try the Cloud Vision API from the product page][vision].
 
-Can a photo be provided by URL? Here's a hint — with the important bits highlighted...
+Then, use the APIs Explorer to discover more features and options. Like providing a photo with a URL instead of uploading one.
 
-![Screenshot of Cloud Vision request body](/assets/images/posts/a21a/apis-explorer-vision-filled.png)
-<small class="figcaption">Request body for Cloud Vision</small>
+![Request body for Cloud Vision][image-5]
 
-## AutoML
-
-<iframe width="600" height="350" src="https://datastudio.google.com/embed/reporting/1qqluijwur766ABJQvz1bWsmGRsQV37kE/page/vy0Z" frameborder="0" style="border:0" allowfullscreen></iframe>
+[1]: https://cloud.google.com/natural-language/
+[2]: https://cloud.google.com/natural-language/docs/basics#interpreting_sentiment_analysis_values
+[3]: https://developers.google.com/explorer-help
+[4]: https://developers.google.com/apis-explorer/#p/language/v1/language.documents.analyzeSentiment
+[vision]: https://cloud.google.com/vision/
+[image-1]: /assets/images/posts/a21a/try-the-api-nlp.jpg "Screenshot of sentiment analysis results"
+[image-2]: /assets/images/posts/a21a/apis-explorer.png "Screenshot of APIs Explorer home page"
+[image-3]: /assets/images/posts/a21a/apis-explorer-request-body-filled.png "Screenshot of request body filled in with the document, content and type properties added"
+[image-4]: /assets/images/posts/a21a/apis-explorer-response.png "Screenshot of sentiment analysis results in JSON format"
+[image-5]: /assets/images/posts/a21a/apis-explorer-vision-filled.png "Screenshot of Cloud Vision request body"
