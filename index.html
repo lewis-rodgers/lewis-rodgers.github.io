@@ -39,9 +39,11 @@ into the {body} of the default.hbs template -->
     </div>
 </main>
 
-
-{% include site-header.html %}
-
+<div class="outer site-nav-main">
+    <div class="inner">
+        {% include site-nav.html %}
+    </div>
+</div>
 
 <script>
 
