@@ -36,7 +36,7 @@
                     <li class="author-list-item">
                         {% if author[1].username == post.author %}
                             {% if author[1].picture %}
-                            <a href="#" class="static-avatar">
+                            <a href="{{ site.baseurl }}author/{{ post.author }}/" class="static-avatar">
                                 <img class="author-profile-image" src="{{ site.baseurl }}{{ author[1].picture }}" alt="{{ author[1].name }}" />
                             </a>
                             {% endif %}
@@ -46,7 +46,9 @@
                     {% endfor %}
                 </ul>
                 <div class="post-card-byline-content">
-                    <span>authors</span>
+                    <span>
+                        <a href="{{ site.baseurl }}author/{{ post.author }}/">{{ post.author }}</a>
+                    </span>
                     <span class="post-card-byline-date">
                         <time datetime="{{ post.date | date:'%e %B %Y' }}">{{ post.date | date:'%e %B %Y' }}</time> <span class="bull">&bull;</span> 
                         {% assign words = post.content | strip_html | number_of_words %}
