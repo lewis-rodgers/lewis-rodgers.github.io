@@ -103,7 +103,7 @@
         crossorigin="anonymous">
     </script>
     <script type="text/javascript" src="{{ site.baseurl }}assets/built/casper.js"></script>
-    <!-- <script type="text/javascript" src="https://demo.ghost.io/assets/js/jquery.fitvids.js?v=724281a32e"></script> -->
+    <script type="text/javascript" src="https://demo.ghost.io/assets/js/jquery.fitvids.js?v=724281a32e"></script>
 
 
     <!-- Paginator increased to "infinit" in _config.yml -->
@@ -130,6 +130,8 @@
         {% include post-scripts.html %}
     {% elsif page.class == "page-template" %}
         {% include page-scripts.html %}
+    {% elsif page.class == "home-template" %}
+        {% include home-scripts.html %}
     {% endif %}
 
     <!-- Ghost outputs important scripts and data with this tag - it should always be the very last thing before the closing body tag -->
